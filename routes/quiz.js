@@ -2,23 +2,38 @@ const express = require ("express");
 const router = express.Router();
 const {readFile} = require ('fs').promises;
 
-router.get("/", (req,res) =>{
-    
-})
+router.get("/", async (req,res) =>{
+    let chosenWords = await getWords();
+    console.log(chosenWords);
+    res.render('quiz', {chosenWords});
+});
 
 let getWords = async () =>{
     let randomPart = getRandomPart();
+    let allWords = await readFile('resources/allwords.txt', 'utf8');
+    let wordArray = allWords.split('\n');
+    shuffle(wordArray);
+
+    let choices = [];
+    while (choices.length < 5) {
+        let line = wordArray.pop();
+        let [word, part, def] = line.split('\t');
+        if (part === randomPart){
+            choices.push(line);
+        }
+    } 
+    return choices;
 }
 
 let getRandomPart = () =>{
     let parts = ['noun', 'verb', 'adjective'];
     let randomIndex = Math.floor(Math.random()*parts.length);
-    let randomPart = parts(randomIndex);
+    let randomPart = parts[randomIndex];
     return randomPart;
 }
 
 let shuffle = (array) =>{
-    for(let i = 0; 1<array.length-1; i--){
+    for(let i = array.length-1; 1<0; i--){
         let randomNumber = Math.floor(Math.random()*(i+1));
         [array[i], array[randomNumber]] = [array[randomNumber], array[i]];
     }
