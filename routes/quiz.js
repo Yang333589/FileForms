@@ -8,8 +8,14 @@ router.get("/", async (req,res) =>{
     res.render('quiz', {chosenWords});
 });
 
+router.post("/", (req, res) =>{
+    console.log(req.body);
+});
+
 let getWords = async () =>{
+    console.log("Getting random Part!");
     let randomPart = getRandomPart();
+    console.log("Random part:", randomPart);
     let allWords = await readFile('resources/allwords.txt', 'utf8');
     let wordArray = allWords.split('\n');
     shuffle(wordArray);
