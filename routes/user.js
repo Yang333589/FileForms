@@ -7,7 +7,8 @@ router.route('/').get((req, res)=>{
     const {firstName, lastName, gender, age} = req.body;
     const isNameValid = firstName !=="" && lastName !=="";
     const isGenderValid = gender === "male" || gender === "female";
-    if(isNameValid && isGenderValid){ 
+    const isAgeValid = age !== "";
+    if(isNameValid && isGenderValid && isAgeValid){ 
         console.log(`Adding user: ${firstName} ${lastName} Gender: ${gender} Age: ${age}`);
         users.push({firstName:firstName, lastName:lastName, gender:gender, age:age});
         console.log(users);
@@ -15,7 +16,7 @@ router.route('/').get((req, res)=>{
     }
     else{
         console.log("Error adding user!");
-        res.send("users/new", {users})
+        res.send("Something is invalid. Please try again.", {users})
     }
 }); 
 
@@ -32,9 +33,10 @@ router.get('/new', (req, res)=>{ // /users/new
 });*/
 
 router.route('/:id').get((req, res)=>{
+    const user = req.user;
     console.log(req.user);
     console.log("Getting user data");
-    res.send(`Getting User data for id: ${req.user.firstName}`);
+    res.render('users/display', {user});
 }).delete((req, res)=>{
     res.send(`Deleting User data for id: ${req.params.id}`);
 }).put((req, res)=>{
