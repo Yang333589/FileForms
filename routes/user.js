@@ -4,16 +4,18 @@ const router = express.Router();
 router.route('/').get((req, res)=>{
     res.send('User List');
 }).post((req, res) => {
-    const firstName = req.body.firstName;
-    const isValid = firstName !=="";
-    if(isValid){
-        console.log(`Adding user: ${firstName}`);
-        users.push({firstName});
+    const {firstName, lastName, gender, age} = req.body;
+    const isNameValid = firstName !=="" && lastName !=="";
+    const isGenderValid = gender === "male" || gender === "female";
+    if(isNameValid && isGenderValid){ 
+        console.log(`Adding user: ${firstName} ${lastName} Gender: ${gender} Age: ${age}`);
+        users.push({firstName:firstName, lastName:lastName, gender:gender, age:age});
+        console.log(users);
         res.render('users/list', {users});
     }
     else{
         console.log("Error adding user!");
-        res.send("users/new", {firstName:firstName})
+        res.send("users/new", {users})
     }
 }); 
 
@@ -22,7 +24,7 @@ router.get('/list', (req, res) =>{
 });
 
 router.get('/new', (req, res)=>{ // /users/new
-    res.render("users/new", {firstName:"Test"});
+    res.render("users/new", {firstName:"Test", lastName: "Test", gender: "male", age: "21"});
 });
 
 /*router.get('/:id', (req, res) =>{
@@ -32,16 +34,16 @@ router.get('/new', (req, res)=>{ // /users/new
 router.route('/:id').get((req, res)=>{
     console.log(req.user);
     console.log("Getting user data");
-    res.send(`Getting User data for id: ${req.user["name"]}`);
+    res.send(`Getting User data for id: ${req.user.firstName}`);
 }).delete((req, res)=>{
     res.send(`Deleting User data for id: ${req.params.id}`);
 }).put((req, res)=>{
     res.send(`Updating User data for id: ${req.params.id}`);
 });
 
-const users = [{firstName: "George"}, {firstName: "Justyna"}];
-
+const users = [{firstName: "Charles", lastName: "Carlos", gender: "male", age: "21"}, {firstName: "Sammy", lastName: "Hino", gender: "female", age: "19"}];
 router.param("id", (req, res, next, id) => {
+    console.log(id);
     req.user = users[id];
     console.log("Access attempt by user: ", id)
     next();
