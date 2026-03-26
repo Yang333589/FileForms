@@ -16,7 +16,12 @@ router.post("/", (req, res) =>{
         let score = totalCorrect+1;
     }
     let total = totalQuestions+1;
-    
+    //get another new set of words
+    //send that set of words back with the user score
+    //send some other data back?
+        //send correct! if user got it correct
+        //send back correct answer if user got it wrong
+    //hint: sent back 6 variables
 });
 
 let getWords = async () =>{
