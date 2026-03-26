@@ -5,14 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr {
+  border-bottom: 1px solid #ddd;
+}
+</style>
 <body>
     <h1>Our Current Users</h1>
     <ul>
-        <% 
-            let users = locals.users;
-            for (user of users){ %>
-                <li><%= user.firstName %> <%= user.lastName %> <%= user.gender %> <%= user.age%></li>
-          <% } %>
+        <table style="width: 50%;">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
+                <th>Age</th>
+            </tr>
+            <% 
+                let users = locals.users;
+                for (user of users){ %>
+                    <tr>
+                        <td><%= user.firstName %></td>
+                        <td><%= user.lastName %></td>
+                        <td><%= user.gender %></td>
+                        <td><%= user.age%></td>
+                    </tr>
+            <% } %>
+        </table>
     </ul>
 </body>
 </html>
