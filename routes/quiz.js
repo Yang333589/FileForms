@@ -4,18 +4,30 @@ const {readFile} = require ('fs').promises;
 
 router.get("/", async (req,res) =>{
     let chosenWords = await getWords();
-    console.log("Chosen Words: ", chosenWords);
+    //console.log("Chosen Words: ", chosenWords);
     res.render('quiz', {chosenWords});
 });
 
-router.post("/", (req, res) =>{
-    console.log(req.body);
+router.post("/", async (req, res) =>{
+    //console.log(req.body);
+    const body = req.body;
+    //console.log(body);
     let {userChoice, correctDef, totalQuestions, totalCorrect} = req.body;
+    let score = totalCorrect;
+    let total = totalQuestions;
+    let message = "";
     if (userChoice === correctDef){
-        console.log("User guessed correctly!");
-        let score = totalCorrect+1;
-    }
-    let total = totalQuestions+1;
+        //console.log("User guessed correctly!");
+        score++;
+        message = "You got it right!"
+    }else
+        message = "Womp Womp, the correct answer is: " + correctDef;
+    total++;
+
+    //console.log("Score: ", score, "Total: ", total);
+
+    let chosenWords = await getWords();
+    res.render('quiz', {chosenWords, totalCorrect: score,  totalQuestions: total, isCorrect: message});
     //get another new set of words
     //send that set of words back with the user score
     //send some other data back?
@@ -25,9 +37,9 @@ router.post("/", (req, res) =>{
 });
 
 let getWords = async () =>{
-    console.log("Getting random part!");
+    //console.log("Getting random part!");
     let randomPart = getRandomPart();
-    console.log("Random part:", randomPart);
+    //console.log("Random part:", randomPart);
     let allWords = await readFile('resources/allwords.txt', 'utf8');
     //console.log(allWords);
     let wordArray = allWords.split('\n');
@@ -62,7 +74,7 @@ let shuffle = (array) =>{
         let randomNumber = Math.floor(Math.random()*(i+1));
         [array[i], array[randomNumber]] = [array[randomNumber], array[i]];
     }
-    console.log("Array shuffled");
+    //console.log("Array shuffled");
 }
 
 

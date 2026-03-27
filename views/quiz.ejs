@@ -15,6 +15,7 @@
     <% if (questionCount === 0){ %>
         <h1>Welcome to the word quiz!</h1>
     <% } else {%>
+        <h1><%=isCorrect%></h1>
         <h1>Score: <%=score %> / <%=questionCount %></h1>
     <% } %>
     <h2> <%= correctWord %> - <%= correctPart %></h2>
