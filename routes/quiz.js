@@ -4,13 +4,13 @@ const {readFile} = require ('fs').promises;
 
 router.get("/", async (req,res) =>{
     let chosenWords = await getWords();
-    console.log(chosenWords);
+    console.log("Chosen Words: ", chosenWords);
     res.render('quiz', {chosenWords});
 });
 
 router.post("/", (req, res) =>{
     console.log(req.body);
-    let {userChoice, correctDef, totalQuestions, totalCorrect} = ref.body;
+    let {userChoice, correctDef, totalQuestions, totalCorrect} = req.body;
     if (userChoice === correctDef){
         console.log("User guessed correctly!");
         let score = totalCorrect+1;
@@ -25,17 +25,24 @@ router.post("/", (req, res) =>{
 });
 
 let getWords = async () =>{
-    console.log("Getting random Part!");
+    console.log("Getting random part!");
     let randomPart = getRandomPart();
     console.log("Random part:", randomPart);
     let allWords = await readFile('resources/allwords.txt', 'utf8');
+    //console.log(allWords);
     let wordArray = allWords.split('\n');
+    //console.log(wordArray);
     shuffle(wordArray);
+    //console.log(wordArray);
 
     let choices = [];
     while (choices.length < 5) {
         let line = wordArray.pop();
-        let [word, part, def] = line.split('\t');
+        //let [word, part, def] = line.split('\t');
+        let tokens = line.split("\t");
+        let word = tokens[0];
+        let part = tokens[1];
+        let def = tokens[2];
         if (part === randomPart){
             choices.push(line);
         }
@@ -51,10 +58,11 @@ let getRandomPart = () =>{
 }
 
 let shuffle = (array) =>{
-    for(let i = array.length-1; 1<0; i--){
+    for(let i = array.length-1; i>0; i--){
         let randomNumber = Math.floor(Math.random()*(i+1));
         [array[i], array[randomNumber]] = [array[randomNumber], array[i]];
     }
+    console.log("Array shuffled");
 }
 
 

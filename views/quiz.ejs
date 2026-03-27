@@ -9,7 +9,7 @@
         let score = locals.totalCorrect ?? 0;
         let randomIndex = parseInt(Math.random()*chosenWords.length);
         let chosenWord = chosenWords[randomIndex];
-        let [correctWord, correctPart, correctDef] = chosenWords.split('\t');
+        let [correctWord, correctPart, correctDef] = chosenWord.split('\t');
     %>
     <h1>Word Quiz</h1>
     <% if (questionCount === 0){ %>
