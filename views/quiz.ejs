@@ -1,40 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Document</title>
+    <link rel="stylesheet" href="wordQuiz.css">
 </head>
+
 <body>
-    <% 
-        let questionCount = locals.totalQuestions ?? 0;
-        let score = locals.totalCorrect ?? 0;
-        let randomIndex = parseInt(Math.random()*chosenWords.length);
-        let chosenWord = chosenWords[randomIndex];
-        let [correctWord, correctPart, correctDef] = chosenWord.split('\t');
-    %>
-    <h1>Word Quiz</h1>
-    <% if (questionCount === 0){ %>
-        <h1>Welcome to the word quiz!</h1>
-    <% } else {%>
-        <h1><%=isCorrect%></h1>
-        <h1>Score: <%=score %> / <%=questionCount %></h1>
-    <% } %>
-    <h2> <%= correctWord %> - <%= correctPart %></h2>
-    <form action="quiz" method="post">
-        <ol>
-            <% for (currentWord of chosenWords){
-                let [word, part, def] = currentWord.split('\t'); %>
-                <li> 
-                    <label> 
-                        <input type="radio" name="userChoice" value="<%=def%>">
-                        <%= def %>
-                    </label>
-                </li>
-            <% } %>
-        </ol>
-        <input type="submit" value="Submit Answer!">
-        <input type="hidden" name="correctDef" value="<%=correctDef%>">
-        <input type="hidden" name="totalQuestions" value="<%=questionCount%>">
-        <input type="hidden" name="totalCorrect" value="<%=score%>">
-    </form>
+    <% let questionCount=locals.totalQuestions ?? 0; let score=locals.totalCorrect ?? 0; let
+        randomIndex=parseInt(Math.random()*chosenWords.length); let chosenWord=chosenWords[randomIndex]; let
+        [correctWord, correctPart, correctDef]=chosenWord.split('\t'); %>
+        <h1>Word Quiz</h1>
+        <% if (questionCount===0){ %>
+            <h1>Welcome to the word quiz!</h1>
+            <% } else {%>
+                <h1>
+                    <% if (wasCorrect) { %>
+                        <span class="correct">
+                            <%= isCorrect %>
+                        </span>
+                        <% } else { %>
+                            <span class="wrong">
+                                <%= isCorrect %>
+                            </span>
+                            <% } %>
+                </h1>
+                <h1>Score: <%=score %> / <%=questionCount %>
+                </h1>
+                <% } %>
+                    <h2>
+                        <%= correctWord %> - <%= correctPart %>
+                    </h2>
+                    <form action="quiz" method="post">
+                        <ol>
+                            <% for (currentWord of chosenWords){ let [word, part, def]=currentWord.split('\t'); %>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="userChoice" value="<%=def%>">
+                                        <%= def %>
+                                    </label>
+                                </li>
+                                <% } %>
+                        </ol>
+                        <input type="submit" value="Submit Answer!">
+                        <input type="hidden" name="correctDef" value="<%=correctDef%>">
+                        <input type="hidden" name="totalQuestions" value="<%=questionCount%>">
+                        <input type="hidden" name="totalCorrect" value="<%=score%>">
+                    </form>
 </body>
+
 </html>

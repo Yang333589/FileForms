@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
   
 router.route('/').get((req, res)=>{
-    res.send('User List');
+    res.render('users/list', {users});
 }).post((req, res) => {
     const {firstName, lastName, gender, age} = req.body;
     const isNameValid = firstName !=="" && lastName !=="";
@@ -34,8 +34,8 @@ router.get('/new', (req, res)=>{ // /users/new
 
 router.route('/:id').get((req, res)=>{
     const user = req.user;
-    console.log(req.user);
-    console.log("Getting user data");
+    //console.log(req.user);
+    //console.log("Getting user data");
     res.render('users/display', {user});
 }).delete((req, res)=>{
     res.send(`Deleting User data for id: ${req.params.id}`);
@@ -45,9 +45,9 @@ router.route('/:id').get((req, res)=>{
 
 const users = [{firstName: "Charles", lastName: "Carlos", gender: "male", age: "21"}, {firstName: "Sammy", lastName: "Hino", gender: "female", age: "19"}];
 router.param("id", (req, res, next, id) => {
-    console.log(id);
+    //console.log(id);
     req.user = users[id];
-    console.log("Access attempt by user: ", id)
+    //console.log("Access attempt by user: ", id)
     next();
 });
 

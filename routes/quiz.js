@@ -1,42 +1,44 @@
-const express = require ("express");
+const express = require("express");
 const router = express.Router();
-const {readFile} = require ('fs').promises;
+const { readFile } = require('fs').promises;
 
-router.get("/", async (req,res) =>{
+router.get("/", async (req, res) => {
     let chosenWords = await getWords();
     //console.log("Chosen Words: ", chosenWords);
-    res.render('quiz', {chosenWords});
+    res.render('quiz', { chosenWords });
 });
 
-router.post("/", async (req, res) =>{
+router.post("/", async (req, res) => {
     //console.log(req.body);
     const body = req.body;
     //console.log(body);
-    let {userChoice, correctDef, totalQuestions, totalCorrect} = req.body;
+    let { userChoice, correctDef, totalQuestions, totalCorrect } = req.body;
     let score = totalCorrect;
     let total = totalQuestions;
     let message = "";
-    if (userChoice === correctDef){
+    let wasCorrect = false;
+    if (userChoice === correctDef) {
         //console.log("User guessed correctly!");
         score++;
         message = "You got it right!"
-    }else
-        message = "Womp Womp, the correct answer is: " + correctDef;
+        wasCorrect = true;
+    } else
+        message = "Womp Womp! The correct answer is: " + correctDef;
     total++;
 
     //console.log("Score: ", score, "Total: ", total);
 
     let chosenWords = await getWords();
-    res.render('quiz', {chosenWords, totalCorrect: score,  totalQuestions: total, isCorrect: message});
+    res.render('quiz', { chosenWords, totalCorrect: score, totalQuestions: total, isCorrect: message, wasCorrect: wasCorrect });
     //get another new set of words
     //send that set of words back with the user score
     //send some other data back?
-        //send correct! if user got it correct
-        //send back correct answer if user got it wrong
+    //send correct! if user got it correct
+    //send back correct answer if user got it wrong
     //hint: sent back 6 variables
 });
 
-let getWords = async () =>{
+let getWords = async () => {
     //console.log("Getting random part!");
     let randomPart = getRandomPart();
     //console.log("Random part:", randomPart);
@@ -55,23 +57,23 @@ let getWords = async () =>{
         let word = tokens[0];
         let part = tokens[1];
         let def = tokens[2];
-        if (part === randomPart){
+        if (part === randomPart) {
             choices.push(line);
         }
-    } 
+    }
     return choices;
 }
 
-let getRandomPart = () =>{
+let getRandomPart = () => {
     let parts = ['noun', 'verb', 'adjective'];
-    let randomIndex = Math.floor(Math.random()*parts.length);
+    let randomIndex = Math.floor(Math.random() * parts.length);
     let randomPart = parts[randomIndex];
     return randomPart;
 }
 
-let shuffle = (array) =>{
-    for(let i = array.length-1; i>0; i--){
-        let randomNumber = Math.floor(Math.random()*(i+1));
+let shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        let randomNumber = Math.floor(Math.random() * (i + 1));
         [array[i], array[randomNumber]] = [array[randomNumber], array[i]];
     }
     //console.log("Array shuffled");
